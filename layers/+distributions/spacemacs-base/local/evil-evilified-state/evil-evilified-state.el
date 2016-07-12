@@ -327,4 +327,4 @@ Currently this function infloops when the list is circular."
 
 (provide 'evil-evilified-state)
 
-;;; core-evilified-state.el ends here
+;;; evil-evilified-state.el ends here

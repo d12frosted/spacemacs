@@ -477,7 +477,7 @@ layer directory."
   "Make `cfgl-layer' objects from the passed layer SYMBOLS."
   (delq nil (mapcar 'configuration-layer/make-layer symbols)))
 
-(defun configuration-layer/make-package (pkg &optional obj togglep)
+(defun configuration-layer/make-package (pkg &optional obj togglep layer)
   "Return a `cfgl-package' object based on PKG.
 If OBJ is non nil then copy PKG properties into OBJ, otherwise create
 a new object.
@@ -493,6 +493,15 @@ If TOGGLEP is nil then `:toggle' parameter is ignored."
          (protected (when (listp pkg) (plist-get (cdr pkg) :protected)))
          (copyp (not (null obj)))
          (obj (if obj obj (cfgl-package name-str :name name-sym))))
+    (when (and layer
+               (eq location 'local))
+      (setq location
+            `(recipe
+              :fetcher url
+              :url ,(format
+                     "file://%s%s/%s.el"
+                     (configuration-layer/get-layer-local-dir (oref layer :name))
+                     name-str name-str))))
     (when location (oset obj :location location))
     (when min-version (oset obj :min-version (version-to-list min-version)))
     (when step (oset obj :step step))
@@ -715,9 +724,10 @@ no-op."
                (ownerp (fboundp init-func))
                (obj (object-assoc pkg-name
                                   :name configuration-layer--packages)))
+
           (if obj
-              (setq obj (configuration-layer/make-package pkg obj ownerp))
-            (setq obj (configuration-layer/make-package pkg nil ownerp))
+              (setq obj (configuration-layer/make-package pkg obj ownerp layer))
+            (setq obj (configuration-layer/make-package pkg nil ownerp layer))
             (push obj configuration-layer--packages))
           (when ownerp
             ;; last owner wins over the previous one,
@@ -1119,14 +1129,14 @@ path."
     (unless (package-installed-p pkg-name min-version)
       (condition-case-unless-debug err
           (cond
-           ((or (null pkg) (eq 'elpa location))
-            (configuration-layer//install-from-elpa pkg-name)
-            (when pkg (oset pkg :lazy-install nil)))
-           ((and (listp location) (eq 'recipe (car location)))
-            (configuration-layer//install-from-recipe pkg)
-            (oset pkg :lazy-install nil))
-           (t (configuration-layer//warning "Cannot install package %S."
-                                        pkg-name)))
+            ((or (null pkg) (eq 'elpa location))
+             (configuration-layer//install-from-elpa pkg-name)
+             (when pkg (oset pkg :lazy-install nil)))
+            ((and (listp location) (eq 'recipe (car location)))
+             (configuration-layer//install-from-recipe pkg)
+             (oset pkg :lazy-install nil))
+            (t (configuration-layer//warning "Cannot install package %S."
+                                             pkg-name)))
         ('error
          (configuration-layer//increment-error-count)
          (spacemacs-buffer/append
@@ -1869,4 +1879,3 @@ FILE-TO-LOAD is an explicit file to load after the installation."
 (provide 'core-configuration-layer)
 
 ;;; core-configuration-layer.el ends here
-

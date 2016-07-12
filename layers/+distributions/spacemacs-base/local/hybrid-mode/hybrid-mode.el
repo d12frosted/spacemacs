@@ -159,3 +159,5 @@
          (t (evil-normal-state))))))))
 
 (provide 'hybrid-mode)
+
+;;; hybrid-mode.el ends here

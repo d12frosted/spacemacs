@@ -102,3 +102,5 @@ The `insert state' is replaced by the `emacs state'."
          ((memq major-mode evil-evilified-state-modes) (evil-evilified-state))
          ((memq major-mode evil-motion-state-modes) (evil-motion-state))
          (t (evil-normal-state))))))))
+
+;;; holy-mode.el ends here

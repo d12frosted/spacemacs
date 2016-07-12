@@ -11,7 +11,7 @@
 
 (setq spacemacs-ui-packages
       '(ace-link
-        (centered-cursor :location local)
+        (centered-cursor-mode :location local)
         desktop
         (doc-view :location built-in)
         flx-ido
@@ -58,7 +58,7 @@
             (goto-char (1+ res))
             (widget-button-press (point))))))))
 
-(defun spacemacs-ui/init-centered-cursor ()
+(defun spacemacs-ui/init-centered-cursor-mode ()
   (use-package centered-cursor-mode
     :commands (centered-cursor-mode
                global-centered-cursor-mode)
