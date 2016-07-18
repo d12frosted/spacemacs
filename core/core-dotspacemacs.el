@@ -317,6 +317,10 @@ Possible values for list-type are:
 (defvar dotspacemacs-frozen-packages '()
   "A list of packages that cannot be updated.")
 
+(defvar dotspacemacs-startup-buffer 'spacemacs
+  "Select startup buffer. Possible values are `spacemacs' or
+  `scratch'.")
+
 ;; only for backward compatibility
 (defalias 'dotspacemacs-mode 'emacs-lisp-mode)
 

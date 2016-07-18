@@ -264,6 +264,9 @@ values."
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
    dotspacemacs-whitespace-cleanup nil
+   ;; Select startup buffer. Possible values are `spacemacs' or `scratch'.
+   ;; (default 'spacemacs)
+   dotspacemacs-startup-buffer 'spacemacs
    ))
 
 (defun dotspacemacs/user-init ()

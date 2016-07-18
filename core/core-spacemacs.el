@@ -112,13 +112,14 @@ the final step of executing code in `emacs-startup-hook'.")
         (car dotspacemacs-default-font)))))
   ;; spacemacs init
   (setq inhibit-startup-screen t)
-  (spacemacs-buffer/goto-buffer)
-  (unless (display-graphic-p)
+  (when (eq dotspacemacs-startup-buffer 'spacemacs)
+    (spacemacs-buffer/goto-buffer)
+    (unless (display-graphic-p)
     ;; explicitly recreate the home buffer for the first GUI client
     ;; in order to correctly display the logo
     (spacemacs|do-after-display-system-init
      (kill-buffer (get-buffer spacemacs-buffer-name))
-     (spacemacs-buffer/goto-buffer)))
+     (spacemacs-buffer/goto-buffer))))
   (setq initial-buffer-choice nil)
   (setq inhibit-startup-screen t)
   (require 'core-keybindings)
